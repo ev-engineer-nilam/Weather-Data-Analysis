@@ -1,0 +1,67 @@
+```matlab
+% weather_analysis.m
+% Weather Data Analysis using MATLAB
+% Author: [Your Name]
+% Date: [Date]
+
+%% Load Dataset
+% Assuming CSV file with columns: Date, Temperature, Rainfall, Humidity
+filename = 'pune_weather.csv';
+data = readtable(filename);
+
+% Extract columns
+Date = datetime(data.Date, 'InputFormat', 'yyyy-MM-dd');
+Temperature = data.Temperature;
+Rainfall = data.Rainfall;
+Humidity = data.Humidity;
+
+%% Temperature Trend Plot
+figure;
+plot(Date, Temperature, 'r', 'LineWidth', 1.5);
+xlabel('Date'); ylabel('Temperature (°C)');
+title('Daily Temperature Trend');
+grid on;
+saveas(gcf, 'Results/temp_trend.png');
+
+%% Rainfall Plot
+figure;
+bar(Date, Rainfall, 'b');
+xlabel('Date'); ylabel('Rainfall (mm)');
+title('Daily Rainfall');
+grid on;
+saveas(gcf, 'Results/rainfall_plot.png');
+
+%% Humidity Trend
+figure;
+plot(Date, Humidity, 'g', 'LineWidth', 1.5);
+xlabel('Date'); ylabel('Humidity (%)');
+title('Daily Humidity Trend');
+grid on;
+saveas(gcf, 'Results/humidity_trend.png');
+
+%% Basic Statistics
+avg_temp = mean(Temperature);
+max_temp = max(Temperature);
+min_temp = min(Temperature);
+
+fprintf('Average Temp: %.2f °C\n', avg_temp);
+fprintf('Max Temp: %.2f °C\n', max_temp);
+fprintf('Min Temp: %.2f °C\n', min_temp);
+
+%% Simple Forecast (Linear Regression Example)
+x = (1:length(Temperature))';
+y = Temperature;
+mdl = fitlm(x, y);
+
+% Predict next 30 days
+future_x = (length(x)+1:length(x)+30)';
+predicted_temp = predict(mdl, future_x);
+
+figure;
+plot(x, y, 'b', 'LineWidth', 1.5); hold on;
+plot(future_x, predicted_temp, 'r--', 'LineWidth', 1.5);
+xlabel('Days'); ylabel('Temperature (°C)');
+title('Temperature Forecast using Linear Regression');
+legend('Historical Data','Forecasted Data');
+saveas(gcf, 'Results/forecast_temp.png');
+```
